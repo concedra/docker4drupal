@@ -14,7 +14,7 @@ services:
 
   php:
 # 1. Images with vanilla Drupal – wodby/drupal:[DRUPAL_VERSION]-[PHP_VERSION]-[STABILITY_TAG].
-    image: wodby/drupal:8-7.1-2.4.4
+#    image: wodby/drupal:8-7.1-2.4.4
 #    image: wodby/drupal:8-7.0-2.4.4
 #    image: wodby/drupal:7-7.1-2.4.4
 #    image: wodby/drupal:7-7.0-2.4.4
@@ -22,7 +22,7 @@ services:
 #    image: wodby/drupal:6-5.6-2.4.4
 #    image: wodby/drupal:6-5.3-2.4.4
 # 2. Images without Drupal – wodby/drupal-php:[PHP_VERSION]-[STABILITY_TAG].
-#    image: wodby/drupal-php:7.1-2.4.3
+    image: wodby/drupal-php:7.1-2.4.3
 #    image: wodby/drupal-php:7.0-2.4.3
 #    image: wodby/drupal-php:5.6-2.4.3
 #    image: wodby/drupal-php:5.3-2.4.3
@@ -38,9 +38,9 @@ services:
       # PHP_XDEBUG_REMOTE_CONNECT_BACK: 0         # This is needed to respect remote.host setting below
       # PHP_XDEBUG_REMOTE_HOST: "10.254.254.254"  # You will also need to 'sudo ifconfig lo0 alias 10.254.254.254'
     volumes:
-      - codebase:/var/www/html
+      - ./drupal:/var/www/html
 # Options for macOS users (https://docker4drupal.readthedocs.io/en/latest/macos)
-#      - codebase:/var/www/html:cached # User-guided caching
+#      - ./drupal:/var/www/html:cached # User-guided caching
 #      - docker-sync:/var/www/html # Docker-sync
 
   nginx:
@@ -59,9 +59,9 @@ services:
       NGINX_BACKEND_HOST: php
       NGINX_SERVER_ROOT: /var/www/html/web
     volumes:
-      - codebase:/var/www/html
+      - ./drupal:/var/www/html # User-guided caching
 # Options for macOS users (https://docker4drupal.readthedocs.io/en/latest/macos)
-#      - codebase:/var/www/html:cached # User-guided caching
+#      - ./drupal:/var/www/html:cached # User-guided caching
 #      - docker-sync:/var/www/html # Docker-sync
     labels:
       - 'traefik.backend=nginx'
@@ -202,7 +202,7 @@ services:
     command: -c /dev/null --web --docker --logLevel=INFO
     ports:
       - '8000:80'
-#      - '8080:8080' # Dashboard
+      - '8080:8080' # Dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
